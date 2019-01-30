@@ -30,7 +30,7 @@ class Compra
 		end
 		conn = PG::Connection.connect("localhost",5432,"","","Boleteria","postgres","Rob170100")
 		res = conn.exec_params("select name from clientes where name=$1",[nombre])
-		if res
+		if res.getvalue(0,'nombre')
 			if fc == ""
 				conn.exec_params("insert into clientes('cedula','nombre','apellido','genero') values($1,$2,$3,$4)",[cedula,nombre,apellido,genero])
 			else
@@ -38,11 +38,11 @@ class Compra
 			end
 		else
 		end
-		if
+		if @op == "1"
 			avion()
-		elsif
+		elsif @op == "2"
 			autobus()
-		else
+		elsif @op == "3"
 			barco()
 		end
 	end
