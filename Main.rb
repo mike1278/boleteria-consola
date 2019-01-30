@@ -28,15 +28,15 @@ class Compra
 			puts "Solo se puede ingresar hombre/mujer o abreviacion como h/m, ingrese de nuevo:"
 			genero = gets.chomp.strip.downcase
 		end
-		@conn = PG::Connection.connect("localhost",5432,"","","Boleteria","postgres","Rob170100")
-		res = @conn.exec("select name from clientes where name='#{nombre}'")
+		conn = PG::Connection.connect("localhost",5432,"","","Boleteria","postgres","Rob170100")
+		res = conn.exec_params("select name from clientes where name=$1",[nombre])
 		if res
 			if fc == ""
-				@conn.exec("insert into clientes('cedula','nombre','apellido','genero') values(#{cedula},'#{nombre}','#{apellido}','#{genero}')")
+				conn.exec_params("insert into clientes('cedula','nombre','apellido','genero') values($1,$2,$3,$4)",[cedula,nombre,apellido,genero])
 			else
 				#@conn.exec("insert into clientes('cedula','nombre','apellido','fecha_naciemiento','genero')values("cedula",'"nombre"','"apellido"','"genero"')")
 			end
-		else 
+		else
 		end
 		if
 			avion()
