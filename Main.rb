@@ -28,11 +28,11 @@ class Compra
 			print "Solo se puede ingresar hombre/mujer o abreviacion como h/m, ingrese de nuevo: "
 			genero = gets.chomp.strip.downcase
 		end
-		conn = PG::Connection.connect("localhost",5432,"","","Boleteria","postgres","rob170100")
+		@conn = PG::Connection.connect("localhost",5432,"","","Boleteria","postgres","rob170100")
 		res = conn.exec_params("select nombre from clientes where nombre=$1",[nombre])
 		if res.getvalue(0,0) == nil
 			if fc == ""
-				conn.exec_params("insert into clientes('cedula','nombre','apellido','genero') values($1,$2,$3,$4)",[cedula,nombre,apellido,genero])
+				@conn.exec_params("insert into clientes('cedula','nombre','apellido','genero') values($1,$2,$3,$4)",[cedula,nombre,apellido,genero])
 			else
 				#@conn.exec("insert into clientes('cedula','nombre','apellido','fecha_naciemiento','genero')values("cedula",'"nombre"','"apellido"','"genero"')")
 			end
@@ -44,7 +44,7 @@ class Compra
 		elsif @op == "3"
 			barco()
 		end
-		
+		@conn.close
 	end
 
 	def avion
