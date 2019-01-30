@@ -10,33 +10,32 @@ class Compra
 	end
 	def compra
 		puts "Bienvenido a la compra de su boleto, antes de continuar con su compra necesitamos que ingrese su informacion."
-		puts "Ingrese su nombre: "
+		print "Ingrese su nombre: "
 		nombre = gets.strip.chomp
-		puts "Ingrese su apellido: "
+		print "Ingrese su apellido: "
 		apellido = gets.strip.chomp
-		puts "CI: "
+		print "CI: "
 		cedula = gets.strip.chomp
 		while !is_number?(cedula)
-			puts "Solo se puede ingresar numeros, vuelva a introducir la CI:"
+			print "Solo se puede ingresar numeros, vuelva a introducir la CI: "
 			cedula = gets.strip.chomp
 		end
 		puts "Fecha de nacimiento, orden yyyy/mm/dd"
 		fc = gets.strip.chomp
-		puts "Genero, Hombre/Mujer o H/M"
+		print "Genero, Hombre/Mujer o H/M: "
 		genero = gets.chomp.strip.downcase
 		while !(genero == "hombre" || genero == "h" || genero == "mujer" || genero == "m")
-			puts "Solo se puede ingresar hombre/mujer o abreviacion como h/m, ingrese de nuevo:"
+			print "Solo se puede ingresar hombre/mujer o abreviacion como h/m, ingrese de nuevo: "
 			genero = gets.chomp.strip.downcase
 		end
-		conn = PG::Connection.connect("localhost",5432,"","","Boleteria","postgres","Rob170100")
-		res = conn.exec_params("select name from clientes where name=$1",[nombre])
-		if res.getvalue(0,'nombre')
+		conn = PG::Connection.connect("localhost",5432,"","","Boleteria","postgres","rob170100")
+		res = conn.exec_params("select nombre from clientes where nombre=$1",[nombre])
+		if res.getvalue(0,0) == nil
 			if fc == ""
 				conn.exec_params("insert into clientes('cedula','nombre','apellido','genero') values($1,$2,$3,$4)",[cedula,nombre,apellido,genero])
 			else
 				#@conn.exec("insert into clientes('cedula','nombre','apellido','fecha_naciemiento','genero')values("cedula",'"nombre"','"apellido"','"genero"')")
 			end
-		else
 		end
 		if @op == "1"
 			avion()
@@ -45,6 +44,7 @@ class Compra
 		elsif @op == "3"
 			barco()
 		end
+		
 	end
 
 	def avion
